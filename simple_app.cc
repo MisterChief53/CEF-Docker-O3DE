@@ -123,6 +123,9 @@ void SimpleApp::OnContextInitialized() {
     // CreateWindowEx().
     window_info.SetAsPopup(nullptr, "cefsimple");
 #endif
+    // Set the browser as windowless for offscreen rendering
+    // We put 0 since it seems that we can't leave that parameter empty
+    window_info.SetAsWindowless(0);
 
     // Create the first browser window.
     CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings,
