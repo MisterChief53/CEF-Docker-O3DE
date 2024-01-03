@@ -28,6 +28,8 @@ RUN service ssh start && \
 
 RUN usermod -aG audio,video dev
 
+# RUN chmod -R a+rwx /
+
 # RUN mkdir -p /home/dev/source
 
 ENV DISPLAY=:0
@@ -40,7 +42,6 @@ ENV DISPLAY=:0
 # CMD service dbus start && /usr/sbin/sshd -D && Xvfb :99 -screen 0 1024x768x16 -ac
 # CMD service dbus start && /usr/sbin/sshd && Xvfb :99 -screen 0 1024x768x16 -ac
 # CMD su - dev -c 'Xvfb :0 -screen 0 1024x768x16 -ac' & service dbus start && xdpyinfo && /usr/sbin/sshd -D
-CMD su - dev -c 'Xvfb :0 -screen 0 1024x768x16 -ac' & service dbus start && /usr/sbin/sshd -D
+# CMD su - dev -c 'Xvfb :0 -screen 0 1024x768x16 -ac' & service dbus start && /usr/sbin/sshd -D
+CMD service dbus start && /usr/sbin/sshd -D
 # CMD Xvfb :0 -screen 0 1024x768x16 -ac && sleep 2 && service dbus start && /usr/sbin/sshd -D && xeyes
-
-

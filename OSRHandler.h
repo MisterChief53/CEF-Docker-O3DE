@@ -1,6 +1,6 @@
 #include "include/cef_render_handler.h"
-#include "iostream";
-#include "cstddef";
+#include "iostream"
+#include "cstddef"
 
 // This class is an implementation of the CefRenderHandler interface.
 class OSRHandler : public CefRenderHandler {
@@ -8,6 +8,7 @@ class OSRHandler : public CefRenderHandler {
     CefRect original_popup_rect_;
     int view_width_ = 1000;
     int view_height_ = 1000;
+    mutable base::AtomicRefCount ref_count_{0};
 
     bool GetRootScreenRect(CefRefPtr<CefBrowser> browser, CefRect& rect) {\
         // In cefclient/.../browser_window_osr_gtk.cc (what osrdelegate calls) it is always false.
@@ -83,7 +84,7 @@ class OSRHandler : public CefRenderHandler {
 
     // Called when the browser wants to move or resize the popup widget.
     void OnPopupSize(CefRefPtr<CefBrowser> browser, const CefRect& rect) {
-        float device_scale_factor = 1;
+        // float device_scale_factor = 1;
 
         if (rect.width <= 0 || rect.height <= 0) {
             return;
@@ -93,22 +94,23 @@ class OSRHandler : public CefRenderHandler {
         popup_rect_ = GetPopupRectInWebView(original_popup_rect_);
     }
 
-    /*Called when an element should be painted.
-
-    Pixel values passed to this method are scaled relative to view coordinates based on the value of CefScreenInfo.device_scale_factor
-    returned from GetScreenInfo. | type | indicates whether the element is the view or the popup widget. | buffer | contains the pixel
-    data for the whole image. | dirtyRects | contains the set of rectangles in pixel coordinates that need to be repainted. | buffer |
-    will be | width | *| height | *4 bytes in size and represents a BGRA image with an upper - left origin.This method is only called 
-    when CefWindowInfo::shared_texture_enabled is set to false.
-    
-    This is where the pixel buffer is going to be manipulatd. This is an action performed so that you *do something* each time it is 
-    called.
-    
-    */
+//    Called when an element should be painted.
+//
+//    Pixel values passed to this method are scaled relative to view coordinates based on the value of CefScreenInfo.device_scale_factor
+//    returned from GetScreenInfo. | type | indicates whether the element is the view or the popup widget. | buffer | contains the pixel
+//    data for the whole image. | dirtyRects | contains the set of rectangles in pixel coordinates that need to be repainted. | buffer |
+//    will be | width | *| height | *4 bytes in size and represents a BGRA image with an upper - left origin.This method is only called
+//    when CefWindowInfo::shared_texture_enabled is set to false.
+//
+//    This is where the pixel buffer is going to be manipulatd. This is an action performed so that you *do something* each time it is
+//    called.
+//
 
     void OnPaint(CefRefPtr<CefBrowser>, PaintElementType type, const RectList& dirtyRects, const void* buffer, int width, int height) {
-        std::size_t width = 1000;
-        std::size_t height = 1000;
+//        std::size_t width = 1000;
+//        std::size_t height = 1000;
+        width = 1000;
+        height = 1000;
 
         const std::byte* byteBuffer = static_cast<const std::byte*>(buffer);
         std::size_t channelSize = width * height;
@@ -125,4 +127,27 @@ class OSRHandler : public CefRenderHandler {
             std::cout << std::endl;
         }
     }
+
+    bool HasOneRef() const {
+        return ref_count_.IsOne();
+    }
+
+    virtual bool HasAtLeastOneRef() const {
+        return !ref_count_.IsZero();
+    };
+public:
+///
+/// Called to increment the reference count for the object. Should be called
+/// for every new copy of a pointer to a given object.
+///
+void AddRef() const{
+    ref_count_.Increment();
+}
+
+///
+/// Decrement the reference count. Returns true if the reference count is 0.
+///
+bool Release() const {
+    return !ref_count_.Decrement();
+}
 };

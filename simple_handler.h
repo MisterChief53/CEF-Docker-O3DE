@@ -6,13 +6,15 @@
 #define CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
 
 #include "include/cef_client.h"
+#include "OSRHandler.h"
 
 #include <list>
 
 class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
-                      public CefLoadHandler {
+                      public CefLoadHandler,
+                      public OSRHandler {
  public:
   explicit SimpleHandler(bool use_views);
   ~SimpleHandler();
