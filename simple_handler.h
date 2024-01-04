@@ -13,64 +13,75 @@
 class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
-                      public CefLoadHandler,
-                      public OSRHandler {
- public:
-  explicit SimpleHandler(bool use_views);
-  ~SimpleHandler();
+                      public CefLoadHandler {
+public:
 
-  // Provide access to the single global instance of this object.
-  static SimpleHandler* GetInstance();
+    // CefRefPtr<OSRHandler> osr_handler(new OSRHandler());
+    CefRefPtr<OSRHandler> osr_handler;
 
-  // CefClient methods:
-  virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override {
-    return this;
-  }
-  virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override {
-    return this;
-  }
-  virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override { return this; }
+    explicit SimpleHandler(bool use_views);
 
-  // CefDisplayHandler methods:
-  virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
-                             const CefString& title) override;
+    ~SimpleHandler();
 
-  // CefLifeSpanHandler methods:
-  virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
-  virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
-  virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
+    // Provide access to the single global instance of this object.
+    static SimpleHandler *GetInstance();
 
-  // CefLoadHandler methods:
-  virtual void OnLoadError(CefRefPtr<CefBrowser> browser,
-                           CefRefPtr<CefFrame> frame,
-                           ErrorCode errorCode,
-                           const CefString& errorText,
-                           const CefString& failedUrl) override;
+    // CefClient methods:
+    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override {
+        return this;
+    }
 
-  // Request that all existing browser windows close.
-  void CloseAllBrowsers(bool force_close);
+    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override {
+        return this;
+    }
 
-  bool IsClosing() const { return is_closing_; }
+    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override { return this; }
 
-  // Returns true if the Chrome runtime is enabled.
-  static bool IsChromeRuntimeEnabled();
+    // CefDisplayHandler methods:
+    virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
+                               const CefString &title) override;
 
- private:
-  // Platform-specific implementation.
-  void PlatformTitleChange(CefRefPtr<CefBrowser> browser,
-                           const CefString& title);
+    // CefLifeSpanHandler methods:
+    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
 
-  // True if the application is using the Views framework.
-  const bool use_views_;
+    virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
 
-  // List of existing browser windows. Only accessed on the CEF UI thread.
-  typedef std::list<CefRefPtr<CefBrowser>> BrowserList;
-  BrowserList browser_list_;
+    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
 
-  bool is_closing_;
+    // CefLoadHandler methods:
+    virtual void OnLoadError(CefRefPtr<CefBrowser> browser,
+                             CefRefPtr<CefFrame> frame,
+                             ErrorCode errorCode,
+                             const CefString &errorText,
+                             const CefString &failedUrl) override;
 
-  // Include the default reference counting implementation.
-  IMPLEMENT_REFCOUNTING(SimpleHandler);
+    // Request that all existing browser windows close.
+    void CloseAllBrowsers(bool force_close);
+
+    bool IsClosing() const { return is_closing_; }
+
+    // Returns true if the Chrome runtime is enabled.
+    static bool IsChromeRuntimeEnabled();
+
+    virtual CefRefPtr<CefRenderHandler> GetRenderHandler() override;
+
+
+private:
+    // Platform-specific implementation.
+    void PlatformTitleChange(CefRefPtr<CefBrowser> browser,
+                             const CefString &title);
+
+    // True if the application is using the Views framework.
+    const bool use_views_;
+
+    // List of existing browser windows. Only accessed on the CEF UI thread.
+    typedef std::list<CefRefPtr<CefBrowser>> BrowserList;
+    BrowserList browser_list_;
+
+    bool is_closing_;
+
+    // Include the default reference counting implementation.
+IMPLEMENT_REFCOUNTING(SimpleHandler);
 };
 
 #endif  // CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
