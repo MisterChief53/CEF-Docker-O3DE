@@ -124,8 +124,9 @@ class OSRHandler : public CefRenderHandler {
             for (std::size_t channel = 0; channel < 4; ++channel) {
                 std::cout << static_cast<int>(byteBuffer[startIndex + channel]) << " ";
             }
-            std::cout << std::endl;
+            std::cout << "\n";
         }
+        std::cout << std::endl;
     }
 
     bool HasOneRef() const {
