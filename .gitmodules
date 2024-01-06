@@ -1,0 +1,6 @@
+[submodule "cppzmq"]
+	path = cppzmq
+	url = .\\cppzmq\\
+[submodule "libzmq"]
+	path = libzmq
+	url = .\\libzmq\\
