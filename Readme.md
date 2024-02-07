@@ -1,4 +1,5 @@
 **Metapulse Web View Module**
+
 Small application build with the Chromium Embedded Framework that connects to a webpage, builds a pixel buffer out of the webpage's contents, and sends it somewhere else for rendering.
 
 Right now, it is able to connect to a webpage and extract the pixel buffer. The plan is to use ZeroMQ to send the buffer to an O3DE multiplayer server so that the clients can render it.
