@@ -1,6 +1,6 @@
 [submodule "cppzmq"]
 	path = cppzmq
-	url = .\\cppzmq\\
+	url = git@github.com:zeromq/cppzmq.git
 [submodule "libzmq"]
 	path = libzmq
-	url = .\\libzmq\\
+	url = git@github.com:zeromq/libzmq.git
