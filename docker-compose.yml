@@ -6,3 +6,6 @@ services:
         container_name: cef-container
         ports:
             - 5000:22
+        volumes:
+            - ../../:/workspace:cached
+        command: /bin/bash -c "cd /workspace && while true; do sleep 3600; done"
