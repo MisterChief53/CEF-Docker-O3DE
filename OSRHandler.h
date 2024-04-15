@@ -1,6 +1,14 @@
 #include "include/cef_render_handler.h"
 #include "iostream"
 #include "cstddef"
+#include <png.h>
+
+//struct Pixel_struct {
+//    unsigned char red;
+//    unsigned char green;
+//    unsigned char blue;
+//    unsigned char alpha;
+//};
 
 // This class is an implementation of the CefRenderHandler interface.
 class OSRHandler : public CefRenderHandler {
@@ -115,6 +123,9 @@ class OSRHandler : public CefRenderHandler {
         const std::byte* byteBuffer = static_cast<const std::byte*>(buffer);
         std::size_t channelSize = width * height;
 
+        std::cout << "Trying to write image..." << std::endl;
+        saveRgbaToPng(byteBuffer, width, height, "pic.png");
+
         for (std::size_t i = 0; i < channelSize; ++i) {
             // Calculate the starting index in the buffer for the current pixel
             std::size_t startIndex = 4 * i;
@@ -137,18 +148,86 @@ class OSRHandler : public CefRenderHandler {
         return !ref_count_.IsZero();
     };
 public:
-///
-/// Called to increment the reference count for the object. Should be called
-/// for every new copy of a pointer to a given object.
-///
-void AddRef() const{
-    ref_count_.Increment();
-}
+    ///
+    /// Called to increment the reference count for the object. Should be called
+    /// for every new copy of a pointer to a given object.
+    ///
+    void AddRef() const{
+        ref_count_.Increment();
+    }
 
-///
-/// Decrement the reference count. Returns true if the reference count is 0.
-///
-bool Release() const {
-    return !ref_count_.Decrement();
-}
+    ///
+    /// Decrement the reference count. Returns true if the reference count is 0.
+    ///
+    bool Release() const {
+        return !ref_count_.Decrement();
+    }
+private:
+    void saveRgbaToPng(const std::byte* pixels, int width, int height, const char* filename) {
+        // Open output file
+        FILE* fp = fopen(filename, "wb");
+        if (!fp) {
+            // Handle file opening error
+            return;
+        }
+
+        // Create PNG writing structures
+        png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+        if (!png_ptr) {
+            fclose(fp);
+            // Handle PNG structure creation error
+            return;
+        }
+
+        png_infop info_ptr = png_create_info_struct(png_ptr);
+        if (!info_ptr) {
+            png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+            fclose(fp);
+            // Handle PNG info creation error
+            return;
+        }
+
+        // Set error handling
+        if (setjmp(png_jmpbuf(png_ptr))) {
+            png_destroy_write_struct(&png_ptr, &info_ptr);
+            fclose(fp);
+            // Handle PNG error during writing
+            return;
+        }
+
+        // Set PNG info
+        png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGBA,
+                     PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+        std::cout << "now building raw pointers" << std::endl;
+        png_bytepp bytePointers = createRowPointers(pixels, width, height);
+        png_set_rows(png_ptr, info_ptr, bytePointers);
+
+        std::cout << "built raw pointers and set png rows" << std::endl;
+
+        // Write PNG header
+        png_write_info(png_ptr, info_ptr);
+
+        // Write image data
+        png_write_image(png_ptr, bytePointers);
+
+        std::cout << "wrote image data" << std::endl;
+
+        // Write PNG end information
+        png_write_end(png_ptr, info_ptr);
+
+        // Clean up resources
+        png_destroy_write_struct(&png_ptr, &info_ptr);
+        fclose(fp);
+    }
+
+    png_bytepp createRowPointers(const std::byte* pixels, int width, int height) {
+        png_bytepp row_pointers = (png_bytepp)malloc(sizeof(png_bytep) * height);
+        for (int y = 0; y < height; y++) {
+            row_pointers[y] = (png_byte*)pixels + y * width * 4;
+        }
+        return row_pointers;
+    }
+
+
 };

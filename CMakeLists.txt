@@ -92,11 +92,18 @@ if(OS_LINUX)
   # Add subdirectory for cppzmq
   add_subdirectory(./cppzmq)
 
+  # find libpng
+  # Find libpng include directory
+  find_path(PNG_INCLUDE_DIR png.h PATH_SUFFIXES png)
+  # Find libpng library
+  find_library(PNG_LIBRARY NAMES png)
+  include_directories(${PNG_INCLUDE_DIR})
+
   # Executable target.
   add_executable(${CEF_TARGET} ${CEFSIMPLE_SRCS})
   SET_EXECUTABLE_TARGET_PROPERTIES(${CEF_TARGET})
   add_dependencies(${CEF_TARGET} libcef_dll_wrapper)
-  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} libzmq cppzmq)
+  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} libzmq cppzmq ${PNG_LIBRARY})
 
   # Set rpath so that libraries can be placed next to the executable.
   set_target_properties(${CEF_TARGET} PROPERTIES INSTALL_RPATH "$ORIGIN")
