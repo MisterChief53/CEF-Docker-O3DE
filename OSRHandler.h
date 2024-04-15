@@ -2,6 +2,7 @@
 #include "iostream"
 #include "cstddef"
 #include <png.h>
+#include <unistd.h>
 
 //struct Pixel_struct {
 //    unsigned char red;
@@ -122,6 +123,8 @@ class OSRHandler : public CefRenderHandler {
 
         const std::byte* byteBuffer = static_cast<const std::byte*>(buffer);
         std::size_t channelSize = width * height;
+
+        sleep(20);
 
         std::cout << "Trying to write image..." << std::endl;
         saveRgbaToPng(byteBuffer, width, height, "pic.png");
