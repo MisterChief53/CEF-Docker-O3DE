@@ -14,4 +14,9 @@ services:
                     memory: 1024M
                 limits:
                     memory: 4000M
+        environment:
+            - QT_X11_NO_MITSHM=1
+            - _X11_NO_MITSHM=1
+            - _MITSHM=0
+        ipc: host
         #command: /bin/bash -c "cd /workspace && while true; do sleep 3600; done"
