@@ -86,6 +86,7 @@ SET_CEF_TARGET_OUT_DIR()
 #
 
 if(OS_LINUX)
+
   # Add subdirectory for libzmq
   add_subdirectory(./libzmq)
 
@@ -94,16 +95,56 @@ if(OS_LINUX)
 
   # find libpng
   # Find libpng include directory
-  find_path(PNG_INCLUDE_DIR png.h PATH_SUFFIXES png)
-  # Find libpng library
-  find_library(PNG_LIBRARY NAMES png)
-  include_directories(${PNG_INCLUDE_DIR})
+#  find_path(PNG_INCLUDE_DIR png.h PATH_SUFFIXES png)
+#  # Find libpng library
+#  find_library(PNG_LIBRARY NAMES png)
+#  include_directories(${PNG_INCLUDE_DIR})
+
+  find_package(PNG REQUIRED)
+
+  set(HEADER_DIRS
+          "/usr/include/png++/"
+#          "/usr/include/png++/color.hpp"
+#          "/usr/include/png++/config.hpp"
+#          "/usr/include/png++/consumer.hpp"
+#          "/usr/include/png++/convert_color_space.hpp"
+#          "/usr/include/png++/end_info.hpp"
+#          "/usr/include/png++/error.hpp"
+#          "/usr/include/png++/ga_pixel.hpp"
+#          "/usr/include/png++/generator.hpp"
+#          "/usr/include/png++/gray_pixel.hpp"
+#          "/usr/include/png++/image.hpp"
+#          "/usr/include/png++/image_info.hpp"
+#          "/usr/include/png++/index_pixel.hpp"
+#          "/usr/include/png++/info.hpp"
+#          "/usr/include/png++/info_base.hpp"
+#          "/usr/include/png++/io_base.hpp"
+#          "/usr/include/png++/packed_pixel.hpp"
+#          "/usr/include/png++/palette.hpp"
+#          "/usr/include/png++/pixel_buffer.hpp"
+#          "/usr/include/png++/pixel_traits.hpp"
+#          "/usr/include/png++/png.hpp"
+#          "/usr/include/png++/reader.hpp"
+#          "/usr/include/png++/require_color_space.hpp"
+#          "/usr/include/png++/rgb_pixel.hpp"
+#          "/usr/include/png++/rgba_pixel.hpp"
+#          "/usr/include/png++/solid_pixel_buffer.hpp"
+#          "/usr/include/png++/streaming_base.hpp"
+#          "/usr/include/png++/tRNS.hpp"
+#          "/usr/include/png++/types.hpp"
+#          "/usr/include/png++/writer.hpp"
+  )
+
+  foreach(dir ${HEADER_DIRS})
+    include_directories(${dir})
+  endforeach(dir)
 
   # Executable target.
   add_executable(${CEF_TARGET} ${CEFSIMPLE_SRCS})
   SET_EXECUTABLE_TARGET_PROPERTIES(${CEF_TARGET})
   add_dependencies(${CEF_TARGET} libcef_dll_wrapper)
-  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} libzmq cppzmq ${PNG_LIBRARY})
+#  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} libzmq cppzmq ${PNG_LIBRARY})
+  target_link_libraries(${CEF_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} libzmq cppzmq PNG::PNG)
 
   # Set rpath so that libraries can be placed next to the executable.
   set_target_properties(${CEF_TARGET} PROPERTIES INSTALL_RPATH "$ORIGIN")
