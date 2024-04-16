@@ -7,7 +7,7 @@ services:
         ports:
             - 5000:22
         volumes:
-            - ../../:/workspace:cached
+            - .:/workspace:cached
         deploy:
             resources:
                 reservations:
