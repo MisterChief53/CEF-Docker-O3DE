@@ -306,9 +306,9 @@ void OsrRenderer::OnPaint(CefRefPtr<CefBrowser> browser,
     for (png::uint_32 y = 0; y < image.get_height(); ++y)
     {
         for (png::uint_32 x = 0; x < image.get_width(); ++x) {
-            image.set_pixel(x, y, png::basic_rgba_pixel((unsigned char) *(charBuffer + count),
+            image.set_pixel(x, y, png::basic_rgba_pixel((unsigned char) *(charBuffer + count + 2),
                                                         (unsigned char) *(charBuffer + count + 1),
-                                                        (unsigned char) *(charBuffer + count + 2),
+                                                        (unsigned char) *(charBuffer + count),
                                                         (unsigned char) *(charBuffer + count + 3)));
             count += 4;
         }

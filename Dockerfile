@@ -10,7 +10,7 @@ RUN apt-get install -y build-essential g++ cmake doxygen libx11-dev gdb git
 
 RUN apt-get install -y xorg xvfb x11-apps x11-utils dbus libnss3 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0 libcups2 libdrm2 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libpango-1.0-0 libcairo2 libasound2 libatspi2.0 libgtk2.0-dev libgtk-3-dev
 
-RUN apt-get install -y libpng++-dev
+RUN apt-get install -y libpng++-dev curl
 
 # For ssh communication with Visual Studio
 RUN mkdir -p /var/run/sshd
