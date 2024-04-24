@@ -21,6 +21,9 @@ RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config && \
 # Expose port 22
 EXPOSE 22
 
+# Expose port 8080
+EXPOSE 8080
+
 # WORKDIR /source
 
 # start ssh server and setup a user
