@@ -308,8 +308,10 @@ void RootWindowGtk::CreateRootWindow(const CefBrowserSettings& settings,
   int width, height;
   if (start_rect_.IsEmpty()) {
     // TODO(port): Also, maybe there's a better way to choose the default size.
-    width = 800;
-    height = 600;
+    //width = 800;
+    //height = 600;
+    width = 1920;
+    height = 1080;
   } else {
     width = start_rect_.width;
     height = start_rect_.height;

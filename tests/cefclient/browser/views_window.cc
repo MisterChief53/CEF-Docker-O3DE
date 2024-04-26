@@ -31,8 +31,10 @@ namespace {
 const char kDefaultExtensionIcon[] = "window_icon";
 
 // Default window size.
-constexpr int kDefaultWidth = 800;
-constexpr int kDefaultHeight = 600;
+//constexpr int kDefaultWidth = 800;
+//constexpr int kDefaultHeight = 600;
+constexpr int kDefaultWidth = 1920;
+constexpr int kDefaultHeight = 1080;
 
 #if defined(OS_MAC)
 constexpr int kTitleBarHeight = 35;
