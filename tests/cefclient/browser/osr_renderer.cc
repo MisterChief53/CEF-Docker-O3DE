@@ -289,6 +289,10 @@ void OsrRenderer::ClearPopupRects() {
   original_popup_rect_.Set(0, 0, 0, 0);
 }
 
+/*
+ * We take our buffer of bytes and build a PNG image, which we then save as img.png
+ * each time we invoke this function.
+ */
 void OsrRenderer::OnPaint(CefRefPtr<CefBrowser> browser,
                           CefRenderHandler::PaintElementType type,
                           const CefRenderHandler::RectList& dirtyRects,
