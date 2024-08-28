@@ -19,4 +19,4 @@ services:
             - _X11_NO_MITSHM=1
             - _MITSHM=0
         ipc: host
-        command: /bin/bash -c "cd /workspace && cd build && cmake .. && cmake --build . && service dbus start && run_webview.sh && /usr/sbin/sshd -D"
+        command: /bin/bash -c "cd /workspace && cd build && cmake .. && cmake --build . && service dbus start && ../run_webview.sh && /usr/sbin/sshd -D"
