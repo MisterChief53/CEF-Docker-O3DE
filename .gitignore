@@ -4,3 +4,11 @@ Debug/
 Release/
 
 *.png
+
+# Ignore everything in the folder
+/build/*
+
+# Exclude the specific file from being ignored
+!/build/.gitkeep
+
+/docs/*

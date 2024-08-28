@@ -256,8 +256,8 @@ endif()
 
 if(OS_LINUX)
   # Add subdirectory for libzmq
-  add_subdirectory(./libzmq)
+  #add_subdirectory(./libzmq)
 
   # Add subdirectory for cppzmq
-  add_subdirectory(./cppzmq)
+  #add_subdirectory(./cppzmq)
 endif()
