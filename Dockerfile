@@ -2,7 +2,6 @@ FROM debian
 
 LABEL description="Container for working with CEF"
 
-
 # Some general build dependencies
 RUN apt-get update && apt-get install -y gcc rsync zip openssh-server make clang clangd
 
@@ -35,17 +34,7 @@ RUN service ssh start && \
 
 RUN usermod -aG audio,video dev
 
-# RUN chmod -R a+rwx /
-
-# RUN mkdir -p /home/dev/source
-
 ENV DISPLAY=:0
-
-# CMD ["/usr/sbin/sshd", "-D"]
-
-
 
 # Start D-Bus and Xvfb
 CMD service dbus start && /usr/sbin/sshd -D
-# CMD cd /workspace && mkdir build && cd build && cmake .. && cmake --build . && service dbus start && /usr/sbin/sshd -D
-# CMD Xvfb :0 -screen 0 1024x768x16 -ac && sleep 2 && service dbus start && /usr/sbin/sshd -D && xeyes
