@@ -13,6 +13,8 @@ RUN apt-get install -y xorg xvfb x11-apps x11-utils dbus libnss3 libnss3 libnspr
 
 RUN apt-get install -y libpng++-dev curl
 
+RUN apt-get install -y dos2unix
+
 # For ssh communication with Visual Studio
 RUN mkdir -p /var/run/sshd
 
